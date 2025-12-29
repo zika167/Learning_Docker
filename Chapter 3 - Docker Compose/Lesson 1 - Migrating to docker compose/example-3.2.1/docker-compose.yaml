@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  web-app:
+    image: jwilder/whoami
+    ports:
+      - "8000"  # Để Docker tự chọn cổng máy chủ (Random Port)
