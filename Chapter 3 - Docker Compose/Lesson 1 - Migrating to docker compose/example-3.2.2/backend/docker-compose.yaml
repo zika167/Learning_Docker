@@ -1,0 +1,11 @@
+services:
+  my-backend:
+    image: example-backend
+    networks:
+      - default
+      - mang-ket-noi-db # Backend xin gia nhập mạng này
+
+networks:
+  mang-ket-noi-db:
+    external: true      # Báo hiệu: Mạng này có sẵn rồi, đừng tạo mới!
+    name: mang-noi-bo-xom-lang # Tên phải khớp y hệt bên trên

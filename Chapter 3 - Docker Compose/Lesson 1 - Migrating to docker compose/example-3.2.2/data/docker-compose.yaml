@@ -1,0 +1,11 @@
+services:
+  my-database:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+    networks:
+      - shared-network  # Gắn vào mạng chung
+
+networks:
+  shared-network:
+    name: mang-noi-bo-xom-lang  # Đặt tên cụ thể cho mạng
