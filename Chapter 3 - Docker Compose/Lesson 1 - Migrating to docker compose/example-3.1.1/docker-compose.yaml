@@ -1,0 +1,7 @@
+services:
+  yt-dlp-ubuntu:   # Đây là TÊN DỊCH VỤ
+    image: zikar167/yt-download
+    build: .
+    volumes:
+      - .:/mydir   # Tự động mapping thư mục
+    container_name: yt-dlp
