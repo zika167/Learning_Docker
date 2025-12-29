@@ -1,0 +1,27 @@
+services:
+  # 1. Dịch vụ Redis (Mới thêm vào)
+  redis:
+    image: redis
+
+  # 2. Dịch vụ Backend (Sửa đổi)
+  backend:
+    image: example-backend
+    build: ./example-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - REQUEST_ORIGIN=http://localhost:5001
+      - REDIS_HOST=redis   # <--- Quan trọng: Chỉ định địa chỉ Redis
+    depends_on:
+      - redis              # Đảm bảo Redis chạy trước Backend
+
+  # 3. Dịch vụ Frontend (Giữ nguyên)
+  frontend:
+    image: example-frontend
+    build: ./example-frontend
+    ports:
+      - "5001:5000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8080
+
+# Vào example-2.6 để chạy docker-compose up --build
