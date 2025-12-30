@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # 1. Frontend
+  frontend:
+    image: example-frontend
+    build: ./example-frontend
+    ports:
+      - "5001:5000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8080
+
+  # 2. Backend
+  backend:
+    image: example-backend
+    build: ./example-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - REQUEST_ORIGIN=http://localhost:5001
+      - REDIS_HOST=redis
+      # --- CẤU HÌNH POSTGRES (MỚI) ---
+      # Tên này phải trùng với tên service bên dưới (dòng 34)
+      - POSTGRES_HOST=db
+      # Mật khẩu phải trùng với mật khẩu khai báo ở service db
+      - POSTGRES_PASSWORD=mysecretpassword
+      # Các thông số mặc định (có thể bỏ qua nếu dùng mặc định, nhưng ghi ra cho rõ)
+      - POSTGRES_USER=postgres
+      - POSTGRES_DATABASE=postgres
+    depends_on:
+      - redis
+      - db  # Backend phải đợi db chạy xong mới chạy
+
+  # 3. Redis
+  redis:
+    image: redis
+
+  # 4. Postgres
+  db:
+    image: postgres:13.2-alpine  # Dùng bản alpine cho nhẹ (hoặc postgres:latest)
+    restart: unless-stopped      # Tự khởi động lại nếu bị tắt (trừ khi mình stop)
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    volumes:
+      # --- ĐÂY LÀ PHẦN QUAN TRỌNG CỦA BÀI 2.7 ---
+      # Cấu trúc: Đường_dẫn_máy_thật : Đường_dẫn_trong_container
+      - ./database:/var/lib/postgresql/data
