@@ -13,6 +13,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    # --- THÊM MỚI TỪ ĐÂY ---
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+      # --- KẾT THÚC THÊM MỚI ---
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -27,4 +32,5 @@ jobs:
       with:
         context: .
         push: true
+        platforms: linux/amd64,linux/arm64  # <--- QUAN TRỌNG: Build cho cả 2 chip
         tags: ${{ secrets.DOCKER_USERNAME }}/learning-docker:latest
