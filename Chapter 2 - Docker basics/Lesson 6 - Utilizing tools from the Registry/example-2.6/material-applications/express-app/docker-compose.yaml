@@ -1,0 +1,17 @@
+services:
+  # Service 1: Ứng dụng của bạn
+  app:
+    image: zikar167/express-deploy:latest  # Thay zikar167 bằng username của bạn
+    ports:
+      - "8080:8080"
+    container_name: my-express-app
+
+  # Service 2: Watchtower (Tự động cập nhật)
+  watchtower:
+    image: containrrr/watchtower
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=60
+      - DOCKER_API_VERSION=1.44 # Fix lỗi cho máy Mac của bạn
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    container_name: watchtower
