@@ -26,4 +26,4 @@ jobs:
           push: true
           # SỬA DÒNG DƯỚI ĐÂY: Thay 'zika167' bằng username Docker Hub của bạn
           # Thay 'learning-docker' bằng tên image bạn muốn đặt
-          tags: zika167/learning-docker:latest
+          tags: zikar167/learning-docker:latest
