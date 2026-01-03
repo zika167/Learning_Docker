@@ -67,7 +67,7 @@ jobs:
         uses: docker/build-push-action@v5 # Đã nâng lên v5
         with:
           # QUAN TRỌNG: Trỏ vào thư mục chứa code mới
-          context: ./express-app 
+          context: "Chapter 2 - Docker basics/Lesson 6 - Utilizing tools from the Registry/example-2.6/material-applications/express-app"
           push: true
           # Build cho cả chip Intel và chip Apple Silicon
           platforms: linux/amd64,linux/arm64 
