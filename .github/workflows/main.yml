@@ -73,3 +73,7 @@ jobs:
           platforms: linux/amd64,linux/arm64 
           # Đặt tên image mới (khác bài cũ)
           tags: ${{ secrets.DOCKER_USERNAME }}/express-deploy:latest
+
+      - name: Trigger Render Deployment
+        if: success()
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
