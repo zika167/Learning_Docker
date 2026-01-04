@@ -31,3 +31,5 @@ echo "4. Đang dọn dẹp..."
 rm -rf my-temp-build
 
 echo "--- THÀNH CÔNG! Image $DOCKER_REPO đã được public. ---"
+
+# Lệnh chạy: ./builder.sh mluukkai/express_app zikar167/testing-script
