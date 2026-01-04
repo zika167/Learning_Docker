@@ -1,35 +1,37 @@
-#!/bin/bash
+#!/bin/sh
 
-# 1. Kiểm tra xem người dùng có nhập đủ 2 tham số không
+# Kiểm tra tham số
 if [ $# -ne 2 ]; then
-    echo "Lỗi: Bạn cần nhập đủ 2 tham số."
-    echo "Cách dùng: ./builder.sh <github-user/repo> <docker-hub-user/repo>"
+    echo "Usage: $0 <github-repo> <docker-repo>"
     exit 1
 fi
 
-# Gán biến cho dễ đọc
 GITHUB_REPO=$1
 DOCKER_REPO=$2
 
-echo "--- BẮT ĐẦU ---"
+# --- PHẦN MỚI: Đăng nhập Docker Hub từ bên trong container ---
+# Lấy User và Pass từ biến môi trường (sẽ truyền vào khi chạy docker run)
+if [ -n "$DOCKER_PWD" ] && [ -n "$DOCKER_USER" ]; then
+    echo "$DOCKER_PWD" | docker login -u "$DOCKER_USER" --password-stdin
+else
+    echo "Lỗi: Chưa nhập User/Pass của Docker Hub"
+    exit 1
+fi
+# -------------------------------------------------------------
 
-# 2. Tải code từ GitHub về một thư mục tạm (tên là my-temp-build)
-echo "1. Đang tải code từ GitHub: $GITHUB_REPO..."
-git clone https://github.com/$GITHUB_REPO.git my-temp-build
+echo "1. Cloning $GITHUB_REPO..."
+git clone https://github.com/$GITHUB_REPO.git my-project
 
-# 3. Build Docker Image
-# Lưu ý: Chúng ta trỏ đường dẫn build vào thư mục 'my-temp-build' vừa tải về
-echo "2. Đang Build Docker Image: $DOCKER_REPO..."
-docker build -t $DOCKER_REPO ./my-temp-build
+echo "2. Building $DOCKER_REPO..."
+# Image docker:git dùng Alpine Linux nên đường dẫn hiện tại là .
+docker build -t $DOCKER_REPO ./my-project
 
-# 4. Đẩy lên Docker Hub
-echo "3. Đang đẩy Image lên Docker Hub..."
+echo "3. Pushing to Docker Hub..."
 docker push $DOCKER_REPO
 
-# 5. Dọn dẹp (Xóa thư mục tạm đi cho sạch máy)
-echo "4. Đang dọn dẹp..."
-rm -rf my-temp-build
+echo "4. Cleaning up..."
+rm -rf my-project
 
-echo "--- THÀNH CÔNG! Image $DOCKER_REPO đã được public. ---"
+echo "Done!"
 
 # Lệnh chạy: ./builder.sh mluukkai/express_app zikar167/testing-script
